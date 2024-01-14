@@ -3,12 +3,18 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
+import { ExampleModule } from './example/example.module';
+import { PostsModule } from './posts/posts.module';
 import configuration from './config/configuration';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(configuration().mongo_atlas)
+    MongooseModule.forRoot(configuration().mongo_atlas),
+    UsersModule,
+    PostsModule,
+    ExampleModule
   ],
   controllers: [AppController],
   providers: [AppService],
