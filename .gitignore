@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+# Pruebas
+/src/example
+
 # Env
 .env
 
