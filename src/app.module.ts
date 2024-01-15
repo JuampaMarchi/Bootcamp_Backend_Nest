@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { ExampleModule } from './example/example.module';
 import { PostsModule } from './posts/posts.module';
 import configuration from './config/configuration';
 
@@ -13,8 +12,7 @@ import configuration from './config/configuration';
     ConfigModule.forRoot(),
     MongooseModule.forRoot(configuration().mongo_atlas),
     UsersModule,
-    PostsModule,
-    ExampleModule
+    PostsModule
   ],
   controllers: [AppController],
   providers: [AppService],
