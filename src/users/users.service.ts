@@ -3,17 +3,17 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 
 export class UsersService {
-    create(){
-        return []
+    create(data: Object){
+        return [data]
     }
     findAll(){
         return []
     }
-    findOne(){
-        return []
+    findOne(id: String){
+        return [id]
     }
-    update(){
-        return []
+    update(id: String, data: Object){
+        return data
     }
     delete(){
         return []

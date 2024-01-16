@@ -8,6 +8,9 @@ export class PostsService {
     findAll(){
         return []
     }
+    findAllByUser(){
+        return []
+    }
     findOne(){
         return []
     }
