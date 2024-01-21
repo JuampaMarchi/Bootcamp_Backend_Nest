@@ -18,11 +18,11 @@ export class User {
     @Prop({type: String, required: true})
     email: string;
 
-    @Prop({type: String, required: true})
+    @Prop({type: String, default: 'user'})
     role: string;
 
-    @Prop({type: Boolean, required: true})
-    active: boolean;;
+    @Prop({type: Boolean, default: true})
+    active: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
