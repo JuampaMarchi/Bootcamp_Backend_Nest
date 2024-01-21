@@ -13,15 +13,17 @@ export class Post {
     @Prop({type: String, required: true})
     creatorId: string
 
-    @Prop({type: Number, required: true})
+    @Prop({type: Number, default: 0})
     likes: number
 
-    @Prop({type: Object, required: true})
-    comments: {
-        comment: string,
-        commenterId: string,
-        likes: number,
-    }
+    @Prop({type: Array<Object>, default: []})
+    comments: [
+        {
+            comment: string,
+            commenterId: string,
+            likes: number,
+        }
+    ]
 
 }
 

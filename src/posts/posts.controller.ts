@@ -1,21 +1,45 @@
-import { Controller, Get, Post } from '@nestjs/common';
+// Nest
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+
+// Service
 import { PostsService } from './posts.service';
+
+// Interfaces
+import { Posts } from './interfaces/post';
+
+// Dto
+import { CreatePostDto } from './dto/create-post';
+import { UpdatePostDto } from './dto/update-post';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @Get()
+  findAll(): Promise<Posts[]> {
+    return this.postsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<Posts> {
+    return this.postsService.findOne(id);
+  }
+
   @Post()
-  createPost(): Array<Object> {
-    return this.postsService.create()
+  create(@Body() createPostDto: CreatePostDto): Promise<Posts> {
+    return this.postsService.create(createPostDto);
   }
-  
-  @Get()
-  getPosts(): Array<Object> {
-    return this.postsService.findAll()
+
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto
+  ): Promise<Posts> {
+    return this.postsService.update(id, updatePostDto);
   }
-  @Get()
-  getById(): Array<Object> {
-    return this.postsService.findAll()
+
+  @Delete(':id')
+  remove(@Param('id') id: string): Promise<Posts> {
+    return this.postsService.remove(id);
   }
 }
