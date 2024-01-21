@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
 
-export type UserDocument = HydratedDocument<Product>;
+export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true})
-export class Product {
-    
+export class User {
+
     @Prop({type: String, required: true})
     username: string;
 
@@ -25,4 +25,4 @@ export class Product {
     active: boolean;;
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
+export const UserSchema = SchemaFactory.createForClass(User);
