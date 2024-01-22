@@ -1,4 +1,4 @@
 export class CommentPostDto {
-        comment: string;
-        commenterId: string;
+        readonly comment: string;
+        readonly commenterId: string;
 }
