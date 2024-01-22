@@ -10,6 +10,7 @@ import { Posts } from './interfaces/post';
 // Dto
 import { CreatePostDto } from './dto/create-post';
 import { UpdatePostDto } from './dto/update-post';
+import { CommentPostDto } from './dto/comment-post';
 
 @Controller('posts')
 export class PostsController {
@@ -36,6 +37,21 @@ export class PostsController {
     @Body() updatePostDto: UpdatePostDto
   ): Promise<Posts> {
     return this.postsService.update(id, updatePostDto);
+  }
+
+  @Put('/comment/:id')
+  insertComment(
+    @Param('id') id: string,
+    @Body() commentPostDto: CommentPostDto
+  ): Promise<Posts> {
+    console.log("body", commentPostDto)
+    return this.postsService.insertComment(id, commentPostDto);
+  }
+
+  @Put('/del-comment/:id')
+  removeComment(
+    @Param('id') id: string): Promise<Posts> {
+    return this.postsService.removeComment(id);
   }
 
   @Delete(':id')

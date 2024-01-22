@@ -20,8 +20,7 @@ export class Post {
     comments: [
         {
             comment: string,
-            commenterId: string,
-            likes: number,
+            commenterId: string
         }
     ]
 

@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import { Post } from './schemas/posts.schema';
 import { CreatePostDto } from './dto/create-post';
 import { UpdatePostDto } from './dto/update-post';
+import { CommentPostDto } from './dto/comment-post';
 
 @Injectable()
 
@@ -33,6 +34,14 @@ export class PostsService {
     async update(id: string, updatePostDto: UpdatePostDto): Promise<Post> {
         return this.postModel.updateOne({_id: id}, updatePostDto).lean();
     }
+
+    async insertComment(id: string, commentPostDto: CommentPostDto): Promise<Post> {
+        return this.postModel.updateOne({_id: id}, { $push: {comments: commentPostDto}},).lean();
+    }
+
+    async removeComment(id: string): Promise<Post> {
+        return this.postModel.updateOne({_id: id}, { $pop: {comments: 1}},).lean();
+    }    
 
     async remove(id: string): Promise<Post> {
         return this.postModel.deleteOne({_id: id}).lean();

@@ -5,8 +5,7 @@ export class CreatePostDto {
     readonly comments: [
         {
             comment: string,
-            commenterId: string,
-            likes: number,
+            commenterId: string
         }
     ];
 }

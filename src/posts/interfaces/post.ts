@@ -5,8 +5,7 @@ export class Posts {
     comments: [
         {
             comment: string,
-            commenterId: string,
-            likes: number,
+            commenterId: string
         }
     ];
 }
