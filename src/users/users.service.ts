@@ -30,6 +30,10 @@ export class UsersService {
         return this.userModel.findOne({ _id: id} ).lean();
     }
 
+    async findByName(name: string): Promise<User> {
+        return this.userModel.findOne({ username: name} ).lean();
+    }
+
     async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
         return this.userModel.updateOne({ _id: id }, updateUserDto).lean();
     }

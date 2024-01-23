@@ -6,10 +6,12 @@ import { ConfigModule } from '@nestjs/config';
 // App
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthController } from './auth/auth.controller';
 
 // Modules
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
+import { AuthModule } from './auth/auth.module';
 
 // Environment
 import configuration from './config/configuration';
@@ -19,9 +21,10 @@ import configuration from './config/configuration';
     ConfigModule.forRoot(),
     MongooseModule.forRoot(configuration().mongo_atlas),
     UsersModule,
-    PostsModule
+    PostsModule,
+    AuthModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [AppService],
 })
 export class AppModule {}
