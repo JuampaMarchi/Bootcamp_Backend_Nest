@@ -1,9 +1,7 @@
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
-//Variables de entorno
-import env from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,8 +15,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document)
 
-  await app.listen(env().port);
-  console.log(`Aplicacion corriendo en http://localhost:${env().port}`)
+  const configService = app.get(ConfigService)
+  const port = configService.get<number>('port')
+
+  await app.listen(port);
+  console.log(`Aplicacion corriendo en http://localhost:${port}`);
 }
 
 bootstrap();

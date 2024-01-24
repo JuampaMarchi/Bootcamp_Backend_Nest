@@ -14,12 +14,22 @@ import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 
 // Environment
-import configuration from './config/configuration';
+import { ConfigService } from '@nestjs/config';
+import { config } from './config/configuration';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot(configuration().mongo_atlas),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config]
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('mongo_atlas')
+      }),
+      inject: [ConfigService]
+    }),
     UsersModule,
     PostsModule,
     AuthModule
