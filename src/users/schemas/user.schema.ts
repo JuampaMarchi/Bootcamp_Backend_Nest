@@ -7,7 +7,7 @@ export type UserDocument = HydratedDocument<User>;
 export class User {
     _id: string;
 
-    @Prop({type: String, required: true})
+    @Prop({type: String, required: true, unique: true})
     username: string;
 
     @Prop({type: String, required: true})
@@ -19,7 +19,7 @@ export class User {
     @Prop({type: String, required: true})
     lastName: string;
 
-    @Prop({type: String, required: true})
+    @Prop({type: String, required: true, unique: true})
     email: string;
 
     @Prop({type: String, default: 'user'})

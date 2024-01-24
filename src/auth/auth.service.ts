@@ -8,6 +8,9 @@ import { User } from "./interfaces/user";
 import { UsersService } from "src/users/users.service";
 import { JwtService } from "@nestjs/jwt";
 
+// Middleware
+import * as bcrypt from 'bcrypt';
+
 @Injectable()
 
 export class AuthService {
@@ -19,10 +22,8 @@ export class AuthService {
 
     async validateUser(username: string, password: string): Promise<User> {
         const user = await this.userService.findByName(username)
-        if (
-            user.username.toLocaleLowerCase() == username.toLocaleLowerCase() &&
-            user.password == password
-        ) {
+        const validPassword = await bcrypt.compare(password, user.password)
+        if (user && validPassword) {
             return {
                 id: user._id,
                 username: user.username,
