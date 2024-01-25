@@ -1,5 +1,5 @@
 // Nest
-import { Controller, Get, Param, Post, Put, Body, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Put, Body, Delete, UseGuards } from '@nestjs/common';
 
 // Service
 import { UsersService } from './users.service';
@@ -14,10 +14,14 @@ import { UpdateUserDto } from './dto/update-user';
 // Middleware
 import * as bcrypt from 'bcrypt';
 
+// Auth
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(): Promise<User[]> {
     return this.usersService.findAll();

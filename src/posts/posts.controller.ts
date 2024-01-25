@@ -1,11 +1,14 @@
 // Nest
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param , Request, UseGuards} from '@nestjs/common';
 
 // Service
 import { PostsService } from './posts.service';
 
 // Interfaces
 import { Posts } from './interfaces/post';
+
+// Guard
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 // Dto
 import { CreatePostDto } from './dto/create-post';
@@ -19,6 +22,12 @@ export class PostsController {
   @Get()
   findAll(): Promise<Posts[]> {
     return this.postsService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('user-posts')
+  userPosts(@Request() req): Promise<Posts[]> {
+    return this.postsService.findAllById(req.user.id)
   }
 
   @Get(':id')

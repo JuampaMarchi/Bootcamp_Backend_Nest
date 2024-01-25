@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 // Environment
 import { ConfigService } from '@nestjs/config';
 import { config } from './config/configuration';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { config } from './config/configuration';
     }),
     UsersModule,
     PostsModule,
-    AuthModule
+    AuthModule,
+    AdminModule
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],

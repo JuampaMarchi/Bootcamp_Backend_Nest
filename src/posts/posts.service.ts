@@ -27,6 +27,10 @@ export class PostsService {
         return this.postModel.find().lean();
     }
 
+    async findAllById(id: string): Promise<Post[]> {
+        return this.postModel.findOne({creatorId: id}).lean();
+    }
+
     async findOne(id: string): Promise<Post> {
         return this.postModel.findOne({_id: id}).lean();
     }
