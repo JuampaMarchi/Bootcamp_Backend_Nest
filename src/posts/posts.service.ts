@@ -23,8 +23,10 @@ export class PostsService {
         return createdPost.save();
     }
 
-    async findAll(): Promise<Post[]> {
-        return this.postModel.find().lean();
+    async findAll(pageQuery: number, sizeQuery: number): Promise<Post[]> {
+        const page = pageQuery
+        const size = sizeQuery
+        return this.postModel.find().skip((page - 1) * size).limit(size).lean();
     }
 
     async findAllById(id: string): Promise<Post[]> {

@@ -1,7 +1,9 @@
 export class UpdatePostDto {
-    readonly post?: string;
+    readonly title?: string;
+    readonly content?: string;
+    readonly author?: string;
     readonly creatorId?: string;
-    readonly likes?: number;
+    readonly category?: string[];
     readonly comments?: [
         {
             comment?: string,

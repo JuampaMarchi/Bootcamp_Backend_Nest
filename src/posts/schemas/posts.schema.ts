@@ -8,13 +8,19 @@ export type PostDocument = HydratedDocument<Post>
 export class Post {
 
     @Prop({type: String, required: true})
-    post: string
+    title: string
+
+    @Prop({type: String, required: true})
+    content: string
+
+    @Prop({type: String, required: true})
+    author: string
 
     @Prop({type: String, required: true})
     creatorId: string
 
-    @Prop({type: Number, default: 0})
-    likes: number
+    @Prop({type: Array<String>, default: 0})
+    category: string[]
 
     @Prop({type: Array<Object>, default: []})
     comments: [

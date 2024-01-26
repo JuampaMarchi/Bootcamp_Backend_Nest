@@ -1,5 +1,5 @@
 // Nest
-import { Controller, Get, Post, Put, Delete, Body, Param , Request} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param , Request, Query} from '@nestjs/common';
 
 // Service
 import { PostsService } from './posts.service';
@@ -15,7 +15,7 @@ import { CreatePostDto } from './dto/create-post';
 import { UpdatePostDto } from './dto/update-post';
 import { CommentPostDto } from './dto/comment-post';
 
-@Auth('user')
+//@Auth('user')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
@@ -31,9 +31,12 @@ export class PostsController {
   }
 
   @Get()
-  @Auth('admin')
-  findAll(): Promise<Posts[]> {
-    return this.postsService.findAll();
+  //@Auth('admin')
+  findAll(
+    @Query('page') page: number,
+    @Query('size') size: number
+  ): Promise<Posts[]> {
+    return this.postsService.findAll(page || 1, size || 10);
   }
 
   @Get(':id')

@@ -1,7 +1,9 @@
 export class Posts {
-    post: string;
+    title: string;
+    content: string;
+    author: string;
     creatorId: string;
-    likes: number;
+    category: string[];
     comments: [
         {
             comment: string,
