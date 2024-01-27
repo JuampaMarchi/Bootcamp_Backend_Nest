@@ -1,5 +1,5 @@
 // Nest
-import { Controller, Get, Post, Put, Delete, Body, Param , Request, Query} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param , Request, Query, UnauthorizedException} from '@nestjs/common';
 
 // Service
 import { PostsService } from './posts.service';
@@ -22,12 +22,12 @@ export class PostsController {
 
   @Post()
   @Auth('user')
-  create(@Body() createPostDto: CreatePostDto): Promise<Posts> {
+  async create(@Body() createPostDto: CreatePostDto): Promise<Posts> {
     return this.postsService.create(createPostDto);
   }
 
   @Get()
-  findAll(
+  async findAll(
     @Query('page') page: number,
     @Query('size') size: number
   ): Promise<Posts[]> {
@@ -35,46 +35,52 @@ export class PostsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Posts> {
+  async findOne(@Param('id') id: string): Promise<Posts> {
     return this.postsService.findOne(id);
   }
 
   @Get('/user/:id')
-  userPosts(
+  async userPosts(
     @Param('id') id: string
   ): Promise<Posts[]> {
     return this.postsService.findAllById(id);
   }
 
   @Put(':id')
-  @Auth('admin')
-  update(
+  @Auth('user')
+  async update(
     @Param('id') id: string,
-    @Body() updatePostDto: UpdatePostDto
+    @Body() updatePostDto: UpdatePostDto,
+    @Request() req
   ): Promise<Posts> {
-    return this.postsService.update(id, updatePostDto);
+    if(req.user.id === updatePostDto.creatorId || req.user.role === 'admin') return this.postsService.update(id, updatePostDto);
+
+    throw new UnauthorizedException('Forbidden Resource')
   }
 
   @Put('/comment/:id')
-  @Auth('admin')
-  insertComment(
+  @Auth('user')
+  async insertComment(
     @Param('id') id: string,
     @Body() commentPostDto: CommentPostDto
   ): Promise<Posts> {
-    console.log("body", commentPostDto)
     return this.postsService.insertComment(id, commentPostDto);
   }
 
   @Put('/del-comment/:id')
   @Auth('admin')
-  removeComment(
+  async removeComment(
     @Param('id') id: string): Promise<Posts> {
     return this.postsService.removeComment(id);
   }
 
   @Delete(':id')
-  @Auth('admin')
-  remove(@Param('id') id: string): Promise<Posts> {
-    return this.postsService.remove(id);
+  @Auth('user')
+  async remove(
+    @Param('id') id: string,
+    @Request() req
+  ): Promise<Posts> {
+    const post = await this.postsService.findOne(id)
+    if(req.user.id === post.creatorId || req.user.role === 'admin') return this.postsService.remove(id);
   }
 }
