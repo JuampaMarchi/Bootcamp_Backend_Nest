@@ -14,6 +14,7 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CreatePostDto } from './dto/create-post';
 import { UpdatePostDto } from './dto/update-post';
 import { CommentPostDto } from './dto/comment-post';
+import { FilterPostDto } from './dto/filter-post';
 
 
 @Controller('posts')
@@ -26,14 +27,16 @@ export class PostsController {
     @Query('page') page: number,
     @Query('size') size: number
   ): Promise<Posts> {
-    console.log('query', query)
     return await this.postsService.searchPosts(query, page || 1, size || 10);
   }
 
-  @Post()
-  @Auth('user')
-  async create(@Body() createPostDto: CreatePostDto): Promise<Posts> {
-    return this.postsService.create(createPostDto);
+  @Get('/filter')
+  async searchByCategoryOrAuthor(
+    @Body() querie: FilterPostDto
+  ): Promise<Posts[]> {
+    const searchQuerie = querie
+    if(searchQuerie.creatorId) return this.postsService.findAllById(searchQuerie.creatorId);
+    return await this.postsService.searchByCategory(searchQuerie);
   }
 
   @Get()
@@ -42,6 +45,12 @@ export class PostsController {
     @Query('size') size: number
   ): Promise<Posts[]> {
     return this.postsService.findAll(page || 1, size || 10);
+  }
+
+  @Post()
+  @Auth('user')
+  async create(@Body() createPostDto: CreatePostDto): Promise<Posts> {
+    return this.postsService.create(createPostDto);
   }
 
   @Get('/:id')

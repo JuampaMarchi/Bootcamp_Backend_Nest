@@ -10,7 +10,7 @@ import { Post } from './schemas/posts.schema';
 import { CreatePostDto } from './dto/create-post';
 import { UpdatePostDto } from './dto/update-post';
 import { CommentPostDto } from './dto/comment-post';
-import { title } from 'process';
+import { FilterPostDto } from './dto/filter-post';
 
 @Injectable()
 
@@ -20,16 +20,19 @@ export class PostsService {
     ) {}
 
     async searchPosts(query: Record<string, any>, pageQuery: number, sizeQuery: number): Promise<Post> {
-        let search = null
         if(query.title) {
-            search = await this.postModel.find({title: {$regex: query.title, $options: 'i'}}).skip((pageQuery - 1) * sizeQuery).limit(sizeQuery).lean();
-            return search
+            return await this.postModel.find({title: {$regex: query.title, $options: 'i'}}).skip((pageQuery - 1) * sizeQuery).limit(sizeQuery).lean();
         }
         if(query.content) {
-            search = await this.postModel.find({content: {$regex: query.content, $options: 'i'}}).skip((pageQuery - 1) * sizeQuery).limit(sizeQuery).lean();
-            return search
+            return await this.postModel.find({content: {$regex: query.content, $options: 'i'}}).skip((pageQuery - 1) * sizeQuery).limit(sizeQuery).lean();
         }
         throw new NotFoundException()
+    }
+
+    async searchByCategory(query: FilterPostDto): Promise<Post[]> {
+        const search = await this.postModel.find({category: { $in: query.category}}).lean()
+        if(!search) throw new NotFoundException('Su busqueda no arrojo ningun resultado')
+        return search
     }
 
     async create(createPostDto: CreatePostDto): Promise<Post> {
