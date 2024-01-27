@@ -45,26 +45,38 @@ export class PostsService {
     }
 
     async findAllById(id: string): Promise<Post[]> {
-        return await this.postModel.find({creatorId: id}).lean();
+        const items = await this.postModel.find({creatorId: id}).lean();
+        if(!items) throw new NotFoundException('El parametro ingresado es incorrecto')
+        return items
     }
 
     async findOne(id: string): Promise<Post> {
-        return this.postModel.findOne({_id: id}).lean();
+        const item = await this.postModel.findById(id).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado es incorrecto')
+        return item
     }
     
     async update(id: string, updatePostDto: UpdatePostDto): Promise<Post> {
+        const item = await this.postModel.findById(id).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado es incorrecto')
         return await this.postModel.updateOne({_id: id}, updatePostDto).lean();
     }
 
     async insertComment(id: string, commentPostDto: CommentPostDto): Promise<Post> {
+        const item = await this.postModel.findById(id).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado es incorrecto')
         return await this.postModel.updateOne({_id: id}, { $push: {comments: commentPostDto}},).lean();
     }
 
     async removeComment(id: string): Promise<Post> {
+        const item = await this.postModel.findById(id).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado es incorrecto')
         return await this.postModel.updateOne({_id: id}, { $pop: {comments: 1}},).lean();
     }    
 
     async remove(id: string): Promise<Post> {
+        const item = await this.postModel.findById(id).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado es incorrecto')
         return await this.postModel.deleteOne({_id: id}).lean();
     }
 }

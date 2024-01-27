@@ -1,5 +1,5 @@
 // Nest
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 // Mongoose
@@ -23,21 +23,31 @@ export class UsersService {
     }
 
     async findAll(): Promise<User[]> {
-        return this.userModel.find().lean();
+        const items = await this.userModel.find().lean();
+        if(!items) throw new NotFoundException('Error al traer resultado de busqueda. Intente nuevamente.')
+        return items
     }
 
     async findOne(id: string): Promise<User> {
-        return this.userModel.findOne({ _id: id} ).lean();
+        const item = await this.userModel.findOne({ _id: id} ).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado no es correcto')
+        return item
     }
 
     async findByName(name: string): Promise<User> {
-        return this.userModel.findOne({ username: name} ).lean();
+        const item = await this.userModel.findOne({ username: name} ).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado no es correcto')
+        return item
     }
 
     async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-        return this.userModel.updateOne({ _id: id }, updateUserDto).lean();
+        const item = await this.userModel.findOne({ _id: id} ).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado no es correcto')
+        return await this.userModel.updateOne({ _id: id }, updateUserDto).lean();
     }
     async remove(id: string): Promise<User> {
-        return this.userModel.deleteOne({ _id: id}).lean();
+        const item = await this.userModel.findOne({ _id: id} ).lean();
+        if(!item) throw new NotFoundException('El parametro ingresado no es correcto')
+        return await this.userModel.deleteOne({ _id: id}).lean();
     }
 }

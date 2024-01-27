@@ -38,7 +38,7 @@ export class AdminService {
     async updatePost(id: string, updatePostDto: UpdatePostDto): Promise<Post> {
         const post = await this.postModel.findOne({_id: id}).lean();
         if(!post) throw new NotFoundException('No se han encontrado resultados');
-        return this.postModel.updateOne({_id: id}, updatePostDto).lean()
+        return await this.postModel.updateOne({_id: id}, updatePostDto).lean()
     }
 
     async removePost(id: string): Promise<Post> {
