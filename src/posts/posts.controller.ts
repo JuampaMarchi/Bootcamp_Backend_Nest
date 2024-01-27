@@ -15,23 +15,18 @@ import { CreatePostDto } from './dto/create-post';
 import { UpdatePostDto } from './dto/update-post';
 import { CommentPostDto } from './dto/comment-post';
 
-//@Auth('user')
+
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Get('user-posts')
-  userPosts(@Request() req): Promise<Posts[]> {
-    return this.postsService.findAllById(req.user.id)
-  }
-  
   @Post()
+  @Auth('user')
   create(@Body() createPostDto: CreatePostDto): Promise<Posts> {
     return this.postsService.create(createPostDto);
   }
 
   @Get()
-  //@Auth('admin')
   findAll(
     @Query('page') page: number,
     @Query('size') size: number
@@ -40,9 +35,15 @@ export class PostsController {
   }
 
   @Get(':id')
-  @Auth('admin')
   findOne(@Param('id') id: string): Promise<Posts> {
     return this.postsService.findOne(id);
+  }
+
+  @Get('/user/:id')
+  userPosts(
+    @Param('id') id: string
+  ): Promise<Posts[]> {
+    return this.postsService.findAllById(id);
   }
 
   @Put(':id')
