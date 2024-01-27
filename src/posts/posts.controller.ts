@@ -20,6 +20,16 @@ import { CommentPostDto } from './dto/comment-post';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @Get('/search')
+  async searchPosts(
+    @Body() query: Record<string, any>,
+    @Query('page') page: number,
+    @Query('size') size: number
+  ): Promise<Posts> {
+    console.log('query', query)
+    return await this.postsService.searchPosts(query, page || 1, size || 10);
+  }
+
   @Post()
   @Auth('user')
   async create(@Body() createPostDto: CreatePostDto): Promise<Posts> {
@@ -34,7 +44,7 @@ export class PostsController {
     return this.postsService.findAll(page || 1, size || 10);
   }
 
-  @Get(':id')
+  @Get('/:id')
   async findOne(@Param('id') id: string): Promise<Posts> {
     return this.postsService.findOne(id);
   }

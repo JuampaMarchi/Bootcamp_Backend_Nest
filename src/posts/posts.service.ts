@@ -1,15 +1,16 @@
 // Nest
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 // Mongoose
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 
 // Schema y Dto
 import { Post } from './schemas/posts.schema';
 import { CreatePostDto } from './dto/create-post';
 import { UpdatePostDto } from './dto/update-post';
 import { CommentPostDto } from './dto/comment-post';
+import { title } from 'process';
 
 @Injectable()
 
@@ -18,38 +19,49 @@ export class PostsService {
         @InjectModel(Post.name) private postModel: Model<Post>,
     ) {}
 
+    async searchPosts(query: Record<string, any>, pageQuery: number, sizeQuery: number): Promise<Post> {
+        let search = null
+        if(query.title) {
+            search = await this.postModel.find({title: {$regex: query.title, $options: 'i'}}).skip((pageQuery - 1) * sizeQuery).limit(sizeQuery).lean();
+            return search
+        }
+        if(query.content) {
+            search = await this.postModel.find({content: {$regex: query.content, $options: 'i'}}).skip((pageQuery - 1) * sizeQuery).limit(sizeQuery).lean();
+            return search
+        }
+        throw new NotFoundException()
+    }
+
     async create(createPostDto: CreatePostDto): Promise<Post> {
         const createdPost = new this.postModel(createPostDto);
-        return createdPost.save();
+        return await createdPost.save();
     }
 
     async findAll(pageQuery: number, sizeQuery: number): Promise<Post[]> {
-        const page = pageQuery
-        const size = sizeQuery
-        return this.postModel.find().skip((page - 1) * size).limit(size).lean();
+        return await this.postModel.find().skip((pageQuery - 1) * sizeQuery).limit(sizeQuery).lean();
     }
 
     async findAllById(id: string): Promise<Post[]> {
-        return this.postModel.find({creatorId: id}).lean();
+        return await this.postModel.find({creatorId: id}).lean();
     }
 
     async findOne(id: string): Promise<Post> {
         return this.postModel.findOne({_id: id}).lean();
     }
-
+    
     async update(id: string, updatePostDto: UpdatePostDto): Promise<Post> {
-        return this.postModel.updateOne({_id: id}, updatePostDto).lean();
+        return await this.postModel.updateOne({_id: id}, updatePostDto).lean();
     }
 
     async insertComment(id: string, commentPostDto: CommentPostDto): Promise<Post> {
-        return this.postModel.updateOne({_id: id}, { $push: {comments: commentPostDto}},).lean();
+        return await this.postModel.updateOne({_id: id}, { $push: {comments: commentPostDto}},).lean();
     }
 
     async removeComment(id: string): Promise<Post> {
-        return this.postModel.updateOne({_id: id}, { $pop: {comments: 1}},).lean();
+        return await this.postModel.updateOne({_id: id}, { $pop: {comments: 1}},).lean();
     }    
 
     async remove(id: string): Promise<Post> {
-        return this.postModel.deleteOne({_id: id}).lean();
+        return await this.postModel.deleteOne({_id: id}).lean();
     }
 }
