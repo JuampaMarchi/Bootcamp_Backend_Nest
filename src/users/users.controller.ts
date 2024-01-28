@@ -1,6 +1,6 @@
 // Nest
 import { Controller, Get, Param, Post, Put, Body, Delete, Request, UnauthorizedException } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 // Service
 import { UsersService } from './users.service';
@@ -54,6 +54,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 404, description: 'Usuario no encontrado'})
+  @ApiBearerAuth()
   @Auth('user')
   async updateUser(
     @Param('id') id: string,
@@ -69,6 +70,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Usuario eliminado con exito'})
   @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiBearerAuth()
   @ApiResponse({ status: 404, description: 'Usuario no encontrado'})
   @Auth('admin')
   remove(@Param('id') id: string): Promise<User> {

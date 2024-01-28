@@ -1,6 +1,6 @@
 // Nest
 import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // Service
 import { AdminService } from './admin.service';
@@ -16,6 +16,7 @@ import { UpdatePostDto } from 'src/posts/dto/update-post';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @ApiTags('Admin')
+@ApiBearerAuth()
 @Auth('admin')
 @Controller('admin')
 export class AdminController {

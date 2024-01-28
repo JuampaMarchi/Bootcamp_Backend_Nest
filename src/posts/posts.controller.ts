@@ -1,6 +1,6 @@
 // Nest
 import { Controller, Get, Post, Put, Delete, Body, Param , Request, Query, UnauthorizedException} from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 // Service
 import { PostsService } from './posts.service';
@@ -58,6 +58,7 @@ export class PostsController {
   @ApiOperation({ summary: 'Crear post. Solo usuarios registrados'})
   @ApiResponse({ status: 200, description: 'Post creado con exito'})
   @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiBearerAuth()
   @Auth('user')
   async create(@Body() createPostDto: CreatePostDto, @Request() req): Promise<Posts> {
     console.log('req.user', req.user)
@@ -88,6 +89,7 @@ export class PostsController {
   @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 404, description: 'Post no encontrado'})
+  @ApiBearerAuth()
   @Auth('user')
   async update(
     @Param('id') id: string,
@@ -104,6 +106,7 @@ export class PostsController {
   @ApiResponse({ status: 200, description: 'Comentario realizado con exito'})
   @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 404, description: 'Post no encontrado'})
+  @ApiBearerAuth()
   @Auth('user')
   async insertComment(
     @Param('id') id: string,
@@ -118,6 +121,7 @@ export class PostsController {
   @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 404, description: 'Comentario no encontrado'})
+  @ApiBearerAuth()
   @Auth('admin')
   async removeComment(
     @Param('id') id: string): Promise<Posts> {
@@ -130,6 +134,7 @@ export class PostsController {
   @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 404, description: 'Post no encontrado'})
+  @ApiBearerAuth()
   @Auth('user')
   async remove(
     @Param('id') id: string,

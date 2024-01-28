@@ -7,6 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Proyecto NestJS Codigo Facilito')
     .setDescription('Proyecto de Blog con posteos y comentarios')
     .setVersion('1.0')
