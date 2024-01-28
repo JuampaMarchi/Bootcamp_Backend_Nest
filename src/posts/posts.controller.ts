@@ -1,6 +1,6 @@
 // Nest
 import { Controller, Get, Post, Put, Delete, Body, Param , Request, Query, UnauthorizedException} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 // Service
 import { PostsService } from './posts.service';
@@ -23,6 +23,8 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get('/search')
+  @ApiOperation({ summary: 'Busca posteos segun criterio de busqueda, por titulo o contenido. Acepta parametros "page" y "size" para paginar resultados'})
+  @ApiResponse({ status: 200, description: 'Listado de posteos'})
   async searchPosts(
     @Body() query: Record<string, any>,
     @Query('page') page: number,
@@ -32,6 +34,8 @@ export class PostsController {
   }
 
   @Get('/filter')
+  @ApiOperation({ summary: 'Filtra posts segun autor o categorias'})
+  @ApiResponse({ status: 200, description: 'Listaod de posteos'})
   async searchByCategoryOrAuthor(
     @Body() querie: FilterPostDto
   ): Promise<Posts[]> {
@@ -41,6 +45,8 @@ export class PostsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Ver todos los posts. Acepta parametros "page" y "size" para paginar resultados'})
+  @ApiResponse({ status: 200, description: 'Listado de posts'})
   async findAll(
     @Query('page') page: number,
     @Query('size') size: number
@@ -49,6 +55,9 @@ export class PostsController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Crear post. Solo usuarios registrados'})
+  @ApiResponse({ status: 200, description: 'Post creado con exito'})
+  @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
   @Auth('user')
   async create(@Body() createPostDto: CreatePostDto, @Request() req): Promise<Posts> {
     console.log('req.user', req.user)
@@ -56,11 +65,17 @@ export class PostsController {
   }
 
   @Get('/:id')
+  @ApiOperation({ summary: 'Ver detalle de post'})
+  @ApiResponse({ status: 200, description: 'Detalle de post'})
+  @ApiResponse({ status: 404, description: 'Post no encontrado'})
   async findOne(@Param('id') id: string): Promise<Posts> {
     return this.postsService.findOne(id);
   }
 
   @Get('/user/:id')
+  @ApiOperation({ summary: 'Ver posts de usuario especificado'})
+  @ApiResponse({ status: 200, description: 'Listado de posts de usuario'})
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado'})
   async userPosts(
     @Param('id') id: string
   ): Promise<Posts[]> {
@@ -68,6 +83,11 @@ export class PostsController {
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Actualizar post. Solo usuario creador o admin'})
+  @ApiResponse({ status: 200, description: 'Post actualizado con exito'})
+  @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiResponse({ status: 404, description: 'Post no encontrado'})
   @Auth('user')
   async update(
     @Param('id') id: string,
@@ -80,6 +100,10 @@ export class PostsController {
   }
 
   @Put('/comment/:id')
+  @ApiOperation({ summary: 'Comentar post. Solo usuarios registrados'})
+  @ApiResponse({ status: 200, description: 'Comentario realizado con exito'})
+  @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiResponse({ status: 404, description: 'Post no encontrado'})
   @Auth('user')
   async insertComment(
     @Param('id') id: string,
@@ -89,6 +113,11 @@ export class PostsController {
   }
 
   @Put('/del-comment/:id')
+  @ApiOperation({ summary: 'Eliminar comentario. Solo admins'})
+  @ApiResponse({ status: 200, description: 'Comentario eliminado con exito'})
+  @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiResponse({ status: 404, description: 'Comentario no encontrado'})
   @Auth('admin')
   async removeComment(
     @Param('id') id: string): Promise<Posts> {
@@ -96,6 +125,11 @@ export class PostsController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar post. Solo usuario creador o admin'})
+  @ApiResponse({ status: 200, description: 'Post actualizado con exito'})
+  @ApiResponse({ status: 401, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
+  @ApiResponse({ status: 404, description: 'Post no encontrado'})
   @Auth('user')
   async remove(
     @Param('id') id: string,
