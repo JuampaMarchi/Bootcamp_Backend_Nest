@@ -22,10 +22,10 @@ export class User {
     @Prop({type: String, required: true, unique: true})
     email: string;
 
-    @Prop({type: String, default: 'user'})
+    @Prop({type: String, required: false, default: 'user'})
     role: string;
 
-    @Prop({type: Boolean, default: true})
+    @Prop({type: Boolean, required: false, default: true})
     active: boolean;
 }
 

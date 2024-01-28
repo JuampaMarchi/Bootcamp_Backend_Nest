@@ -40,7 +40,7 @@ export class PostsService {
         return await createdPost.save();
     }
 
-    async findAll(pageQuery: number, sizeQuery: number): Promise<Post[]> {
+    async findAll(pageQuery?: number, sizeQuery?: number): Promise<Post[]> {
         return await this.postModel.find().skip((pageQuery - 1) * sizeQuery).limit(sizeQuery).lean();
     }
 

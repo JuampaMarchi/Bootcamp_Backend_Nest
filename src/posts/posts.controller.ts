@@ -40,6 +40,7 @@ export class PostsController {
     @Body() querie: FilterPostDto
   ): Promise<Posts[]> {
     const searchQuerie = querie
+    if(!searchQuerie.creatorId && !searchQuerie.category) return this.postsService.findAll();
     if(searchQuerie.creatorId) return this.postsService.findAllById(searchQuerie.creatorId);
     return await this.postsService.searchByCategory(searchQuerie);
   }

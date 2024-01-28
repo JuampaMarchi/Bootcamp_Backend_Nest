@@ -2,26 +2,18 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreatePostDto {
 
-    @ApiProperty({type: 'string'})
+    @ApiProperty({type: String, required: true})
     readonly title: string;
 
-    @ApiProperty({type: 'string'})
+    @ApiProperty({type: String, required: true})
     readonly content: string;
 
-    @ApiProperty({type: 'string'})
+    @ApiProperty({type: String, required: true})
     readonly author: string;
 
-    @ApiProperty({type: 'string'})
+    @ApiProperty({type: String, required: true})
     readonly creatorId: string;
 
-    @ApiProperty({type: 'array', items: { type: 'string'}})
+    @ApiProperty({type: [String], required: true})
     readonly category: string[];
-
-    @ApiProperty({type: 'array', items: {type: 'object', items: { type: 'string'}}})
-    readonly comments?: [
-        {
-            comment: string,
-            commenterId: string
-        }
-    ];
 }

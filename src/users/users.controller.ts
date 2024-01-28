@@ -1,6 +1,6 @@
 // Nest
 import { Controller, Get, Param, Post, Put, Body, Delete, Request, UnauthorizedException } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
 
 // Service
 import { UsersService } from './users.service';
@@ -26,6 +26,7 @@ export class UsersController {
   @Post()
   @ApiOperation({ summary: 'Crear usuario'})
   @ApiResponse({ status: 200, description: 'Usuario creado con exito'})
+  @ApiBody({type: CreateUserDto, description: 'Dto para crear usuarios'})
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     const saltOrRounds = 10;
     const hashedPassword = await bcrypt.hash(createUserDto.password, saltOrRounds)
@@ -44,6 +45,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Ver detalle de usuario'})
   @ApiResponse({ status: 200, description: 'Detalle de usuarios'})
   @ApiResponse({ status: 404, description: 'Usuario no encontrado'})
+  //@ApiParam({name: 'id', type: 'string'})
   async findOne(@Param('id') id: string): Promise<User> {
     return await this.usersService.findOne(id);
   }
@@ -55,13 +57,14 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'No tiene los permisos para realizar esta accion'})
   @ApiResponse({ status: 404, description: 'Usuario no encontrado'})
   @ApiBearerAuth()
+  @ApiBody({type: UpdateUserDto, description: 'Dto para actualizar usuarios'})
   @Auth('user')
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
     @Request() req
   ): Promise<User> {
-    if(req.user.id === updateUserDto.userId || req.user.role === 'admin') return this.usersService.update(req.user.id, updateUserDto)
+    if(req.user.id === updateUserDto.userId || req.user.role === 'admin') return this.usersService.update(id, updateUserDto)
     throw new UnauthorizedException('No tiene los permisos requiros para realizar esta tarea')
   }
 
