@@ -33,9 +33,7 @@ export class UsersController {
   }
 
   @Get()
-  @Auth('admin')
   async findAll(@Request() req): Promise<User[]> {
-   console.log('req', req.user)
    return await this.usersService.findAll();
   }
 
@@ -45,14 +43,12 @@ export class UsersController {
   }
   
   @Put('/:id')
-  //@Auth('user')
+  @Auth('user')
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
     @Request() req
   ): Promise<User> {
-    console.log('logged user', req.user)
-    console.log('dto', updateUserDto)
     if(req.user.id === updateUserDto.userId || req.user.role === 'admin') return this.usersService.update(req.user.id, updateUserDto)
     throw new UnauthorizedException('No tiene los permisos requiros para realizar esta tarea')
   }

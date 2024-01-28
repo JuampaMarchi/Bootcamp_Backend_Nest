@@ -49,7 +49,8 @@ export class PostsController {
 
   @Post()
   @Auth('user')
-  async create(@Body() createPostDto: CreatePostDto): Promise<Posts> {
+  async create(@Body() createPostDto: CreatePostDto, @Request() req): Promise<Posts> {
+    console.log('req.user', req.user)
     return this.postsService.create(createPostDto);
   }
 

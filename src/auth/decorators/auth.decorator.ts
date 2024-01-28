@@ -8,7 +8,7 @@ import { RolesGuard } from "../guards/role.guard";
 import { Roles } from "./roles.decorator";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 
-export function Auth(...roles: string[]) {
+export function Auth(roles: string) {
 
-    return applyDecorators( Roles(...roles), UseGuards(JwtAuthGuard, RolesGuard) );
+    return applyDecorators( Roles(roles), UseGuards(JwtAuthGuard, RolesGuard) );
 }
