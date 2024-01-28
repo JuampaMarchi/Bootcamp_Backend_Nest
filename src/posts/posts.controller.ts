@@ -1,5 +1,6 @@
 // Nest
 import { Controller, Get, Post, Put, Delete, Body, Param , Request, Query, UnauthorizedException} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 // Service
 import { PostsService } from './posts.service';
@@ -16,7 +17,7 @@ import { UpdatePostDto } from './dto/update-post';
 import { CommentPostDto } from './dto/comment-post';
 import { FilterPostDto } from './dto/filter-post';
 
-
+@ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
