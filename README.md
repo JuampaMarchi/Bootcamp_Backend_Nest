@@ -19,20 +19,18 @@
     <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
   <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Descripcion
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Proyecto de Blog utilizando NestJS
 
-## Installation
+## Instalacionn
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Para correr la app
 
 ```bash
 # development
@@ -45,29 +43,21 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Variables de Entorno
 
 ```bash
-# unit tests
-$ npm run test
+# Es necesario cargar las siguientes variables de entorno
 
-# e2e tests
-$ npm run test:e2e
+PORT => Puerto donde correra la aplicacion
 
-# test coverage
-$ npm run test:cov
+NOD_ENV => Señalar si la aplicacion corre en entorno de desarrollo 'DEV', o produccion 'PROD'
+
+MONGO_ATLAS_URI => la direccion URI de la base de datos de Mongo Atlas. Tambien puede utilizarse direccion ip de base de datos local
+
+JWT_SECRET => palabra secreta necesaria para JWT
+
 ```
+## Rutas
 
-## Support
+Para ver el detalle de las rutas correr aplicacion y entrar en 'api/docs' para verlo de manera interactiva con Swagger.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
