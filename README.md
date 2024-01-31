@@ -39,7 +39,7 @@ JWT_SECRET => palabra secreta necesaria para JWT
 
 ```bash
 
-Para ver el detalle de las rutas correr aplicacion y entrar en 'api/docs' para verlo de manera interactiva con Swagger.
+Para ver el detalle de las rutas correr aplicacion y entrar en la ruta 'api/docs' (una vez inicializada la aplicacion) para verlo de manera interactiva con Swagger.
 
 ```
 
