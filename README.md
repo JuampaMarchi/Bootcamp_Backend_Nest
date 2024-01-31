@@ -2,7 +2,11 @@
 
 Proyecto de Blog utilizando NestJS
 
-## Instalacionn
+Aplicacion de backend para un blog donde los usuarios podran registrarse, realizar posteos y a su vez, comentar en los posteos de otros usuarios. Base de datos con mongo atlas, y roles de administradores para poder moderar el contenido.
+
+Se realizo un middleware de autenticacion basado en roles (que utiliza la autenticacion por medio de JWT) para que solo los propios usuarios (y administradores) puedan editar su perfil o posteos. Y tambien para restringir el acceso a rutas para administradores.
+
+## Instalacion
 
 ```bash
 $ npm install
